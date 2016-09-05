@@ -1,5 +1,6 @@
 # grimoire
 [![Build Status](https://travis-ci.org/jshrake/grimoire.svg?branch=master)](https://travis-ci.org/jshrake/grimoire)
+
 Magical libraries for C++ graphics development.
 
 - [**grim_math.h**](grim_math.h): GLSL-like vector math library
