@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -e
+
+GRIM_DIR="$(dirname $(readlink "${BASH_SOURCE[0]}" || readlink -f "${BASH_SOURCE[0]}"))"
+
+function upgrade() {
+  DEST_DIR="$1"
+  cp "$GRIM_DIR/grim_game.h" "$DEST_DIR/src"
+  cp "$GRIM_DIR/grim_game.cpp" "$DEST_DIR/src"
+  cp "$GRIM_DIR/grim_gl.h" "$DEST_DIR/src"
+  cp "$GRIM_DIR/grim_math.h" "$DEST_DIR/src"
+  cp "$GRIM_DIR/template/Makefile" $DEST_DIR
+  cp "$GRIM_DIR/template/CMakeLists.txt" $DEST_DIR
+  cp "$GRIM_DIR/template/.ycm_extra_conf.py" $DEST_DIR
+  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/Makefile"
+  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/CMakeLists.txt"
+}
+
+function new() {
+  NAME=$1
+  DEST_DIR="$(pwd)/$NAME"
+  if [ -d "$DEST_DIR" ]; then
+    echo "new failed: $DEST_DIR already exists"
+    return 1
+  fi
+  mkdir -p $DEST_DIR/src
+  upgrade $DEST_DIR
+  cp "$GRIM_DIR/template/grim_game_template.cpp" "$DEST_DIR/src/$NAME.cpp"
+  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/src/$NAME.cpp"
+  return 0
+}
+
+case $1 in
+  "new")
+    new $2
+    echo "grim created new project $NAME"
+    exit 0
+    ;;
+  "update")
+    git -C $GRIM_DIR pull
+    echo "grim updated"
+    exit 0
+    ;;
+  "upgrade")
+    upgrade $(pwd)
+    echo "grim upgraded"
+    exit 0
+    ;;
+  "build")
+    make
+    exit 0
+    ;;
+  "run")
+    make run
+    exit 0
+    ;;
+  "install")
+    rm /usr/local/bin/grim
+    ln -s "$GRIM_DIR/grim" /usr/local/bin/grim
+    exit 0
+    ;;
+  "uninstall")
+    rm /usr/local/bin/grim
+    exit 0
+esac
