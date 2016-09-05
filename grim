@@ -12,7 +12,6 @@ function upgrade() {
   cp "$GRIM_DIR/grim_math.h" "$DEST_DIR/src"
   cp "$GRIM_DIR/template/Makefile" $DEST_DIR
   cp "$GRIM_DIR/template/CMakeLists.txt" $DEST_DIR
-  cp "$GRIM_DIR/template/.ycm_extra_conf.py" $DEST_DIR
   sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/Makefile"
   sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/CMakeLists.txt"
 }

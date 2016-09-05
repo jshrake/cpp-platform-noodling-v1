@@ -23,4 +23,4 @@ tags:
 	rc -J ./build
 	ctags -R .
 
-.PHONY: clean tags
+.PHONY: clean run tags
