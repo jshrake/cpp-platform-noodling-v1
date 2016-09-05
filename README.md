@@ -7,7 +7,11 @@ Magical libraries for C++ graphics development.
 
 ## Usage
 
+### OSX
+
 ```bash
+# Install dependencies
+$ brew install cmake sdl2
 # Install the command-line tool
 $ git clone https://github.com/jshrake/grimoire
 $ pushd grimoire
@@ -21,6 +25,14 @@ $ grim build
 # Run
 $ grim run
 ```
+
+### Linux
+
+Coming soon!
+
+### Windows
+
+Coming after Linux!
 
 ## WARNING
 
