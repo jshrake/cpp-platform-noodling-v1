@@ -14,7 +14,7 @@ build/GRIM_NAME: build/build.ninja src/grim_game.cpp src/GRIM_NAME.cpp
 	cmake --build build
 
 build/build.ninja: CMakelists.txt
-	cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo-DCMAKE_EXPORT_COMPILE_COMMANDS=1 -GNinja
+	cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo-DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
 clean:
 	-rm -rf build
