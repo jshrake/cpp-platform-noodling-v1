@@ -12,8 +12,8 @@ function upgrade() {
   cp "$GRIM_DIR/grim_math.h" "$DEST_DIR/src"
   cp "$GRIM_DIR/template/Makefile" $DEST_DIR
   cp "$GRIM_DIR/template/CMakeLists.txt" $DEST_DIR
-  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/Makefile"
-  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/CMakeLists.txt"
+  sed -i.bak "s/GRIM_NAME/$NAME/g" "$DEST_DIR/Makefile"
+  sed -i.bak "s/GRIM_NAME/$NAME/g" "$DEST_DIR/CMakeLists.txt"
 }
 
 function new() {
@@ -26,7 +26,9 @@ function new() {
   mkdir -p $DEST_DIR/src
   upgrade $DEST_DIR
   cp "$GRIM_DIR/template/grim_game_template.cpp" "$DEST_DIR/src/$NAME.cpp"
-  sed -i '' "s/GRIM_NAME/$NAME/g" "$DEST_DIR/src/$NAME.cpp"
+  sed -i.bak "s/GRIM_NAME/$NAME/g" "$DEST_DIR/src/$NAME.cpp"
+  # Remove sed .bak files on new
+  rm "$DEST_DIR/*.bak"
   return 0
 }
 
