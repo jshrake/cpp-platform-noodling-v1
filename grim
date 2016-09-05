@@ -28,7 +28,8 @@ function new() {
   cp "$GRIM_DIR/template/grim_game_template.cpp" "$DEST_DIR/src/$NAME.cpp"
   sed -i.bak "s/GRIM_NAME/$NAME/g" "$DEST_DIR/src/$NAME.cpp"
   # Remove sed .bak files on new
-  rm "$DEST_DIR/*.bak"
+  rm "$DEST_DIR"/*.bak
+  rm "$DEST_DIR"/src/*.bak
   return 0
 }
 

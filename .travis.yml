@@ -1,9 +1,11 @@
-sudo: false
+sudo: required
+dist: trusty
 language: cpp
 compiler:
   - clang
   - gcc
+install:
+  - sudo apt-get install -q -y libsdl2-dev
 script:
   - ./grim new foo
-  - cd foo
-  - ../grim build
+  - (cd foo; ../grim build)
