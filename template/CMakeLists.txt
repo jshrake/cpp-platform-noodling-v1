@@ -38,16 +38,6 @@ add_library(GRIM_NAME_lib SHARED
   src/GRIM_NAME.cpp
 )
 
-if(APPLE)
-  find_package(OpenGL REQUIRED)
-  target_link_libraries(GRIM_NAME_lib
-    ${OPENGL_LIBRARIES}
-  )
-  target_include_directories(GRIM_NAME_lib PRIVATE
-    ${OPENGL_INCLUDE_DIR}
-  )
-endif(APPLE)
-
 target_link_libraries(GRIM_NAME_lib
   ${GRIM_SANITIZERS}
 )

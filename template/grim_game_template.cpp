@@ -12,13 +12,17 @@ grim_platform_config config(int argc, char *argv[]) {
   return config;
 }
 
-void init(grim_game_state *state, grim_platform_api *platform) {}
+void init(grim_game_state *state, grim_platform_api *platform) {
+  grim_gl_init();
+}
 
 void deinit(grim_game_state *state, grim_platform_api *platform) {}
 
 void unload(grim_game_state *state, grim_platform_api *platform) {}
 
-void reload(grim_game_state *state, grim_platform_api *platform) {}
+void reload(grim_game_state *state, grim_platform_api *platform) {
+  grim_gl_init();
+}
 
 int tick(grim_game_state *state, grim_platform_api *platform) {
   glClear(GL_COLOR_BUFFER_BIT);
