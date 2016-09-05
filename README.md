@@ -1,5 +1,5 @@
 # grimoire
-
+[![Build Status](https://travis-ci.org/jshrake/grimoire.svg?branch=master)](https://travis-ci.org/jshrake/grimoire)
 Magical libraries for C++ graphics development.
 
 - [**grim_math.h**](grim_math.h): GLSL-like vector math library
@@ -7,11 +7,20 @@ Magical libraries for C++ graphics development.
 
 ## Usage
 
-### OSX
+### OSX/Linux
+
+Install the dependencies:
 
 ```bash
-# Install dependencies
+# Linux
+$ apt-get install cmake libsdl2-dev
+# MacOS
 $ brew install cmake sdl2
+```
+
+Create and run a new project:
+
+```bash
 # Install the command-line tool
 $ git clone https://github.com/jshrake/grimoire
 $ pushd grimoire
@@ -26,13 +35,9 @@ $ grim build
 $ grim run
 ```
 
-### Linux
-
-Coming soon!
-
 ### Windows
 
-Coming after Linux!
+Coming soon!
 
 ## WARNING
 

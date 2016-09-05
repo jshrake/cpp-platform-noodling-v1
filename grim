@@ -2,7 +2,13 @@
 
 set -e
 
-GRIM_DIR="$(dirname $(readlink "${BASH_SOURCE[0]}" || readlink -f "${BASH_SOURCE[0]}"))"
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+GRIM_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 function upgrade() {
   DEST_DIR="$1"
