@@ -1,0 +1,9 @@
+sudo: false
+language: cpp
+compiler:
+  - clang
+  - gcc
+script:
+  - ./grim new foo
+  - cd foo
+  - ../grim build
