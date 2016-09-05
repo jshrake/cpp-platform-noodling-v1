@@ -9,7 +9,7 @@ set(GRIM_SANITIZERS
   "" CACHE STRING "Clang sanitizers")
 
 add_executable (GRIM_NAME
-  src/grim_game.cpp
+  src/grim_platform.cpp
 )
 
 target_compile_definitions(GRIM_NAME PRIVATE

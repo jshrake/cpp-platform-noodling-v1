@@ -1,9 +1,9 @@
-#include "grim_game.h"
+#include "grim_platform.h"
 #define GRIM_GL_IMPLEMENTATION
 #include "grim_gl.h"
 
 grim_platform_config config(int argc, char *argv[]) {
-  grim_platform_config config = {};
+  grim_platform_config config;
   config.window_title = "GRIM_NAME";
   config.window_position = GRIM_WINDOW_POSITION_RIGHT;
   config.permanent_storage_bytes = megabytes(8);

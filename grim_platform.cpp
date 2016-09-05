@@ -1,4 +1,4 @@
-#include "grim_game.h"
+#include "grim_platform.h"
 #include <SDL.h>
 #include <stdio.h>
 #include <string.h>

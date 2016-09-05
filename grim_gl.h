@@ -12,7 +12,7 @@
 
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
-#elif
+#else
 #error "Platform not supported"
 #endif
 

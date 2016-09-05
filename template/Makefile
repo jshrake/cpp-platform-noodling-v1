@@ -10,7 +10,7 @@ default: build/GRIM_NAME
 run: build/GRIM_NAME
 	$(RUN_CMD)
 
-build/GRIM_NAME: build/CMakeCache.txt src/grim_game.cpp src/GRIM_NAME.cpp
+build/GRIM_NAME: build/CMakeCache.txt src/grim_platform.cpp src/GRIM_NAME.cpp
 	cmake --build build
 
 build/CMakeCache.txt: CMakeLists.txt

@@ -6,8 +6,8 @@ GRIM_DIR="$(dirname $(readlink "${BASH_SOURCE[0]}" || readlink -f "${BASH_SOURCE
 
 function upgrade() {
   DEST_DIR="$1"
-  cp "$GRIM_DIR/grim_game.h" "$DEST_DIR/src"
-  cp "$GRIM_DIR/grim_game.cpp" "$DEST_DIR/src"
+  cp "$GRIM_DIR/grim_platform.h" "$DEST_DIR/src"
+  cp "$GRIM_DIR/grim_platform.cpp" "$DEST_DIR/src"
   cp "$GRIM_DIR/grim_gl.h" "$DEST_DIR/src"
   cp "$GRIM_DIR/grim_math.h" "$DEST_DIR/src"
   cp "$GRIM_DIR/template/Makefile" $DEST_DIR
