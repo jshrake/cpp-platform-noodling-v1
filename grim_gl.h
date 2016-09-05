@@ -142,9 +142,11 @@ GRIM_GL_LIST
 #undef GLE
 
 bool grim_gl_init();
+#ifndef GRIM_NO_HELPERS
 GLuint grim_gl_vertex_shader_create(char const *src);
 GLuint grim_gl_fragment_shader_create(char const *src);
 GLuint grim_gl_program_create(GLuint vert, GLuint frag);
+#endif
 
 #endif  // GRIM_INCLUDE_GL_H
 
@@ -152,7 +154,8 @@ GLuint grim_gl_program_create(GLuint vert, GLuint frag);
 
 #ifdef GRIM_GL_IMPLEMENTATION
 
-#include <stdio.h>
+#include <stdio.h>  // printf warnings
+
 #if defined(__linux__) || defined(__APPLE__)
 #include <dlfcn.h>
 #endif  // __linux__
@@ -226,6 +229,9 @@ bool grim_gl_init() {
   return true;
 }
 
+#ifndef GRIM_NO_HELPERS
+#include <stdlib.h>  //malloc and free
+
 static GLuint grim__create_shader(GLenum type, char const *source) {
   GLuint const shader = glCreateShader(type);
   glShaderSource(shader, 1, &source, NULL);
@@ -275,5 +281,5 @@ GLuint grim_gl_program_create(GLuint vert, GLuint frag) {
   }
   return program;
 }
-
+#endif  // !GRIM_NO_HELPERS
 #endif  // GRIM_GL_IMPLEMENTATION
