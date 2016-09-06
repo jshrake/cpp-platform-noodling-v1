@@ -224,8 +224,7 @@ typedef struct {
 #endif
 /*
  */
-
-GRIMAPI grim_platform_config config(int argc, char *argv[]);
+GRIMAPI void config(int argc, char *argv[], grim_platform_config *config);
 
 /*
  */
@@ -246,6 +245,10 @@ GRIMAPI void unload(grim_game_state *state, grim_platform_api *platform);
 /*
  */
 GRIMAPI void reload(grim_game_state *state, grim_platform_api *platform);
+
+/*
+ */
+GRIMAPI void resize(grim_game_state *state, grim_platform_api *platform);
 
 #ifdef __cplusplus
 }

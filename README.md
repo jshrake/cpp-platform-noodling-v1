@@ -42,4 +42,4 @@ Coming soon!
 
 ## WARNING
 
-Don't cast these spells in public! This is experimental software.
+This is experimental software, don't cast these spells in public!

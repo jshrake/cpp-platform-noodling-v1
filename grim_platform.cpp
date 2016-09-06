@@ -44,12 +44,13 @@ grim_internal i64 file_size(char const *filepath) {
 }
 
 typedef struct {
-  grim_platform_config (*config)(int argc, char *argv[]);
+  void (*config)(int argc, char *argv[], grim_platform_config *config);
   void (*init)(grim_game_state *state, grim_platform_api *platform);
   void (*unload)(grim_game_state *state, grim_platform_api *platform);
   void (*reload)(grim_game_state *state, grim_platform_api *platform);
   int (*tick)(grim_game_state *state, grim_platform_api *platform);
   void (*deinit)(grim_game_state *state, grim_platform_api *platform);
+  void (*resize)(grim_game_state *state, grim_platform_api *platform);
 } game_api;
 
 typedef struct {
@@ -66,12 +67,11 @@ typedef struct {
 } game;
 
 #ifdef GRIM_HOT_RELOAD
-grim_internal grim_platform_config game_config_default(int argc, char *argv[]) {
+grim_internal void game_config_default(int argc, char *argv[],
+                                       grim_platform_config *config) {
   unused(argc);
   unused(argv);
-  grim_platform_config config;
-  memset(&config, 0, sizeof(config));
-  return config;
+  memset(config, 0, sizeof(*config));
 }
 grim_internal void game_init_default(grim_game_state *state,
                                      grim_platform_api *platform) {
@@ -99,9 +99,15 @@ grim_internal void game_deinit_default(grim_game_state *state,
   unused(state);
   unused(platform);
 }
+grim_internal void game_resize_default(grim_game_state *state,
+                                       grim_platform_api *platform) {
+  unused(state);
+  unused(platform);
+}
 grim_global_variable game_api const default_api = {
     game_config_default, game_init_default, game_unload_default,
-    game_reload_default, game_tick_default, game_deinit_default};
+    game_reload_default, game_tick_default, game_deinit_default,
+    game_resize_default};
 
 #ifdef _WIN32
 internal int game_should_reload(game *game) { return game->handle == NULL; }
@@ -127,9 +133,11 @@ grim_internal void game_load(game *game) {
   game->api = default_api;
   SDL_UnloadObject(game->handle);
   game->handle = SDL_LoadObject(game->lib_path);
+
   if (game->handle) {
-    game->api.config = (grim_platform_config(*)(int, char *[]))SDL_LoadFunction(
-        game->handle, "config");
+    game->api.config =
+        (void (*)(int, char *[], grim_platform_config *))SDL_LoadFunction(
+            game->handle, "config");
     if (!game->api.config) {
       game->api.config = game_config_default;
       printf("Warning: %s\n", SDL_GetError());
@@ -169,6 +177,13 @@ grim_internal void game_load(game *game) {
       game->api.deinit = game_deinit_default;
       printf("Warning: %s\n", SDL_GetError());
     }
+    game->api.resize =
+        (void (*)(grim_game_state *, grim_platform_api *))SDL_LoadFunction(
+            game->handle, "resize");
+    if (!game->api.resize) {
+      game->api.resize = game_resize_default;
+      printf("Warning: %s\n", SDL_GetError());
+    }
     SDL_ClearError();
   } else {
     // TODO(jshrake): handle LoadObject error
@@ -183,6 +198,7 @@ internal void game_load(game *game) {
   game->api.deinit = &deinit;
   game->api.unload = &unload;
   game->api.reload = &reload;
+  game->api.resize = &resize;
 }
 #endif  // GRIM_HOT_RELOAD
 
@@ -191,7 +207,8 @@ int main(int argc, char *argv[]) {
   memset(&game, 0, sizeof(game));
   game.lib_path = argv[1];
   game_load(&game);
-  grim_platform_config const config = game.api.config(argc - 2, argv + 2);
+  grim_platform_config config;
+  game.api.config(argc - 2, argv + 2, &config);
   u8 *const memory = cast(u8 *)
       calloc(1, config.permanent_storage_bytes + config.frame_storage_bytes);
   grim_arena_init(&game.state.permanent_storage, memory,
@@ -252,6 +269,8 @@ int main(int argc, char *argv[]) {
   SDL_Window *const window =
       SDL_CreateWindow(config.window_title, window_x, window_y, window_w,
                        window_h, window_flags);
+  game.state.window_width = window_w;
+  game.state.window_height = window_h;
   assertm(window, "Error: %s\n", SDL_GetError());
   // TODO(jshrake): Query the hardware and make sure we can support the
   // following
@@ -295,8 +314,6 @@ int main(int argc, char *argv[]) {
     u64 const next = SDL_GetPerformanceCounter();
     game.state.delta_time = (next - current) / (f64)(counts_per_sec);
     game.state.total_time = (next - start) / (f64)(counts_per_sec);
-    SDL_GetWindowSize(window, &game.state.window_width,
-                      &game.state.window_height);
     // update inputs
     // Handle discrete events
     memset(&game.state.input.keyboard.key_event, 0, GRIM_KEYBOARD_KEY_COUNT);
@@ -310,6 +327,12 @@ int main(int argc, char *argv[]) {
         }
         case SDL_WINDOWEVENT: {
           switch (event.window.type) {
+            case SDL_WINDOWEVENT_RESIZED:
+            case SDL_WINDOWEVENT_SIZE_CHANGED:
+              game.state.window_width = event.window.data1;
+              game.state.window_height = event.window.data2;
+              game.api.resize(&game.state, &platform_api);
+              break;
             default:
               break;
           }
