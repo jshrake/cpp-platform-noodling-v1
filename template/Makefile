@@ -10,8 +10,10 @@ default: build
 run: build
 	$(RUN_CMD)
 
-build:
+init:
 	cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+
+build:
 	cmake --build build
 
 clean:
@@ -21,4 +23,4 @@ tags:
 	rc -J ./build
 	ctags -R .
 
-.PHONY: build clean default run tags
+.PHONY: build clean default init run tags

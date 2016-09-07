@@ -3,8 +3,9 @@
 
 Magical libraries for C++ graphics development.
 
-- [**grim_math.h**](grim_math.h): GLSL-like vector math library
 - [**grim_gl.h**](grim_gl.h): Minimal multi-platform OpenGL function loading
+- [**grim_math.h**](grim_math.h): GLSL-like vector math library
+- [**grim_surface.h**](grim_surface.h): OpenGL 3.3+ glDrawPixels replacement
 
 ## Usage
 
